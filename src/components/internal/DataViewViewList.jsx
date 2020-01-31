@@ -4,9 +4,18 @@ import styled from "styled-components";
 import GridTHead from "./GridTHead.jsx";
 import GridTBody from "./GridTBody.jsx";
 
+import theme from "../../utils/theme.js";
+
 const StyledTable = styled.table`
 	width: 100%;
 	border-collapse: collapse;
+
+	& th {
+		position: sticky;
+		top: 7.5em;
+		background: ${theme.backgrounds.system};
+		border: none;
+	}
 `
 
 function DataViewViewList(props) {

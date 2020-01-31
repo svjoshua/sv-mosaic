@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import jsvalidator from "jsvalidator";
 import styled from "styled-components";
+import uniqid from 'uniqid';
 
 import DataViewViewList from "./internal/DataViewViewList.jsx";
 import DataViewViewGrid from "./internal/DataViewViewGrid.jsx";
@@ -11,6 +12,7 @@ import DataViewViewSwitcher from "./internal/DataViewViewSwitcher.jsx";
 import DataViewPager from "./internal/DataViewPager.jsx";
 import DataViewLimit from "./internal/DataViewLimit.jsx";
 import DataViewFilters from "./internal/DataViewFilters.jsx";
+import StickyWrapper from "./internal/StickyWrapper.jsx";
 import theme from "../utils/theme.js";
 import { transformRows } from "../utils/gridTools.js";
 
@@ -18,14 +20,17 @@ const StyledWrapper = styled.div`
 	font-family: ${theme.fontFamily};
 	font-weight: 400;
 	font-size: 14px;
-	
-	& > .headerRow {
+	max-height: 400px;
+	overflow-y: scroll;
+
+	& .StickyWrapper > .headerRow {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		background: ${theme.backgrounds.system};
 	}
 	
-	& > .headerRow > .right {
+	& .StickyWrapper > .headerRow > .right {
 		display: flex;
 		align-items: center;
 	}
@@ -342,61 +347,67 @@ function DataView(props) {
 		]
 	}, [props.limitOptions]);
 	
+	const uniqueViewId = uniqid();
+
 	return (
-		<StyledWrapper className={`
+		<StyledWrapper data-scroll-element-id = 'foo' className={`
 			${ props.loading ? "loading" : "" }
 		`}>
-			<div className="headerRow">
-				<TitleBar
-					title={props.title}
-					buttons={props.buttons}
-					savedViewEnabled={savedViewEnabled}
-					savedView={props.savedView}
-					savedViewState={savedViewState}
-					savedViewCallbacks={savedViewCallbacks}
-				/>
-			</div>
-			<div className="headerRow">
-				<div className="left">
-					{
-						props.filters &&
-						<DataViewFilters
-							loading={props.loading}
-							filter={props.filter}
-							filters={props.filters}
-							activeFilters={props.activeFilters}
-							onActiveFiltersChange={props.onActiveFiltersChange}
-						/>
-					}
+			<StickyWrapper
+				scrollElement = 'foo'
+				>
+				<div className="headerRow">
+					<TitleBar
+						title={props.title}
+						buttons={props.buttons}
+						savedViewEnabled={savedViewEnabled}
+						savedView={props.savedView}
+						savedViewState={savedViewState}
+						savedViewCallbacks={savedViewCallbacks}
+					/>
 				</div>
-				<div className="right">
-					{
-						props.views !== undefined &&
-						<DataViewViewSwitcher
-							view={props.view}
-							views={props.views}
-							onViewChange={props.onViewChange}
-						/>
-					}
-					{
-						props.onLimitChange !== undefined &&
-						<DataViewLimit
-							limit={props.limit}
-							options={limitOptions}
-							onLimitChange={props.onLimitChange}
-						/>
-					}
-					{
-						props.onSkipChange !== undefined &&
-						<DataViewPager
-							limit={props.limit}
-							skip={props.skip}
-							count={props.count}
-							onSkipChange={props.onSkipChange}
-						/>
-					}
+				<div className="headerRow">
+					<div className="left">
+						{
+							props.filters &&
+							<DataViewFilters
+								loading={props.loading}
+								filter={props.filter}
+								filters={props.filters}
+								activeFilters={props.activeFilters}
+								onActiveFiltersChange={props.onActiveFiltersChange}
+							/>
+						}
+					</div>
+					<div className="right">
+						{
+							props.views !== undefined &&
+							<DataViewViewSwitcher
+								view={props.view}
+								views={props.views}
+								onViewChange={props.onViewChange}
+							/>
+						}
+						{
+							props.onLimitChange !== undefined &&
+							<DataViewLimit
+								limit={props.limit}
+								options={limitOptions}
+								onLimitChange={props.onLimitChange}
+							/>
+						}
+						{
+							props.onSkipChange !== undefined &&
+							<DataViewPager
+								limit={props.limit}
+								skip={props.skip}
+								count={props.count}
+								onSkipChange={props.onSkipChange}
+							/>
+						}
+					</div>
 				</div>
-			</div>
+			</StickyWrapper>
 			<div className={`
 				viewContainer
 			`}>

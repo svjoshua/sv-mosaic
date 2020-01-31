@@ -144,7 +144,7 @@ const defaultView = {
 		},
 		view : "list",
 		activeFilters : [],
-		activeColumns : ["image", "title", "categories", "created"]
+		activeColumns : ["image", "title", "categories", "created", "description", "content_owner"]
 	}
 }
 
@@ -164,6 +164,18 @@ const listColumns = [
 	{
 		name : "title",
 		label : "Title",
+		style : "bold",
+		sortable : true
+	},
+	{
+		name : "description",
+		label : "Description",
+		style : "bold",
+		sortable : true
+	},
+	{
+		name : "content_owner",
+		label : "Content Owner",
 		style : "bold",
 		sortable : true
 	},
