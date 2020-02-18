@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useReducer, useCallback } from "react";
-import { pick } from "lodash";
+import { has } from "lodash";
 import moment from "moment";
 import styled from "styled-components";
 
@@ -494,6 +494,12 @@ function DataViewKitchenSink() {
 			return [defaultView, ...viewsApi.find()];
 		},
 		onSavedViewChange : function(data) {
+			if(has(data, 'state.filter.created') === true){
+				const createdObject = data.state.filter.created
+				if (createdObject.rangeEnd !== undefined) { createdObject.rangeEnd = new Date(createdObject.rangeEnd); }
+				if (createdObject.rangeStart !== undefined) { createdObject.rangeStart = new Date(createdObject.rangeStart); }
+			}
+
 			setState({
 				...state,
 				...data.state,
