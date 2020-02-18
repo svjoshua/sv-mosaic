@@ -495,7 +495,7 @@ function DataViewKitchenSink() {
 		},
 		onSavedViewChange : function(data) {
 			if(has(data, 'state.filter.created') === true){
-				const createdObject = data.state.filter.created
+				const createdObject = data.state.filter.created;
 				if (createdObject.rangeEnd !== undefined) { createdObject.rangeEnd = new Date(createdObject.rangeEnd); }
 				if (createdObject.rangeStart !== undefined) { createdObject.rangeStart = new Date(createdObject.rangeStart); }
 			}
